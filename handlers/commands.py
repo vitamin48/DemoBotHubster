@@ -10,6 +10,7 @@ from services.config import config
 from services.logger import logger
 from utils.format_message_info import format_message_info, format_callback_query_info
 from services.queries import add_user, get_lexicon
+from services.keyboards import create_start_menu_keyboard
 
 send_command = Router()
 
@@ -22,7 +23,9 @@ async def start_command(message: Message, bot: Bot):
     logger.info(log_text)
     await bot.send_message(chat_id=config.logs_chat, text=format_message_info(message),
                            parse_mode='html')
-    await message.answer(text=get_lexicon(message=message, lex_key='start'))
+    await message.answer(text=get_lexicon(message=message, lex_key='start'),
+                         reply_markup=create_start_menu_keyboard(),
+                         parse_mode='html')
 
 
 # Обработчик команды /send

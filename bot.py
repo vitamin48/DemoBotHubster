@@ -7,7 +7,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import CallbackQuery
 from aiogram import F
 
-from handlers import commands, universal_handler
+from handlers import commands, universal_handler, main_handlers
 from services.logger import logger
 
 from services.queries import add_user, get_lexicon
@@ -29,6 +29,7 @@ async def main():
 
     dp.include_router(commands.send_command)
     dp.include_router(universal_handler.unihandler)
+    dp.include_router(main_handlers.main_router)
 
     # Запускаем polling
     logger.info('Запускаю бот...')

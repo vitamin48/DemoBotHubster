@@ -55,9 +55,13 @@ def create_start_menu_keyboard():
         callback_data="technical_information"
     )
     builder.button(
-        text="🎁 Получить подарок",
-        callback_data="get_gift"
+        text="🛒 Заказать бота",
+        callback_data="order_bot"
     )
+    # builder.button(
+    #     text="🎁 Получить подарок",
+    #     callback_data="get_gift"
+    # )
 
     # Распределяем кнопки по 2 в ряд для лучшего отображения
     builder.adjust(2, 2, 1, 1, 1)

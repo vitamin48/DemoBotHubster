@@ -68,3 +68,28 @@ def get_lexicon(lex_key):
             return str(result[0])
         else:
             return None
+
+
+def get_user_date_start(user_id: int):
+    """Получает дату начала использования бота (date_start) по user_id
+
+    Args:
+        user_id: ID пользователя в Telegram
+
+    Returns:
+        Строка с датой в формате 'YYYY-MM-DD HH:MM:SS' или None,
+        если пользователь не найден или поле пустое
+    """
+    with sqlite3.connect(NAME_DB) as conn:
+        conn.row_factory = sqlite3.Row  # Для доступа к полям по именам
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "SELECT date_start FROM users WHERE user_id = ?",
+            (user_id,)
+        )
+
+        if result := cursor.fetchone():
+            return result['date_start'] if result['date_start'] else None
+
+    return None

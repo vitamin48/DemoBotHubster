@@ -1,5 +1,5 @@
 from aiogram import Router, types, F
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove
 
 from services.queries import get_lexicon
 from services.keyboards import create_start_menu_keyboard
@@ -23,7 +23,13 @@ async def handle_user_info(callback: types.CallbackQuery):
 
 @main_router.message(F.text == "🔙 Назад")
 async def handle_back_button(message: Message):
-    print('🔙 Назад')
+    # print('🔙 Назад')
+    back_ms = await message.delete()
+    ms = await message.answer(
+        "Главное меню",
+        reply_markup=ReplyKeyboardRemove()  # Скрывает клавиатуру
+    )
+    res = await ms.delete()
     await message.answer(
         text=get_lexicon(lex_key='start'),
         parse_mode="HTML",

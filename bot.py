@@ -28,9 +28,9 @@ async def main():
     ])
 
     dp.include_router(commands.send_command)
-    dp.include_router(universal_handler.unihandler)
     dp.include_router(main_handlers.main_router)
     dp.include_router(work_handlers.work_router)
+    dp.include_router(universal_handler.unihandler)
 
     # Запускаем polling
     logger.info('Запускаю бот...')

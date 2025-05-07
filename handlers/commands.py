@@ -10,7 +10,7 @@ from services.config import config
 from services.logger import logger
 from utils.format_message_info import format_message_info, format_callback_query_info
 from services.queries import add_user, get_lexicon
-from services.keyboards import create_start_menu_keyboard
+from services.keyboards import create_start_menu_keyboard, get_user_phone_number_and_geo
 
 send_command = Router()
 

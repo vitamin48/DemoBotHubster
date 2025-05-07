@@ -31,25 +31,25 @@ def create_start_menu_keyboard():
     builder = InlineKeyboardBuilder()
 
     builder.button(
-        text="ℹ️ Информация о Вас",
+        text="ℹ️ Информация",
         callback_data="information_about_you"
+    )
+    builder.button(
+        text="👥 Пользователи",
+        callback_data="information_about_bot_users"
     )
     builder.button(
         text="💰 Тарифы",
         callback_data="pricing"
     )
     builder.button(
-        text="❓ Частые вопросы (F.A.Q.)",
+        text="❓ F.A.Q.",
         callback_data="faq"
     )
     builder.button(
         text="⚙️ Команды управления ботом",
         callback_data="bot_management_commands"
     )
-    # builder.button(
-    #     text="👥 Информация о пользователях бота",
-    #     callback_data="information_about_bot_users"
-    # )
     builder.button(
         text="🛠️ Техническая информация",
         callback_data="technical_information"
@@ -60,12 +60,12 @@ def create_start_menu_keyboard():
     )
 
     # Распределяем кнопки по 2 в ряд для лучшего отображения
-    builder.adjust(2, 1, 1, 1, 1, 1)
+    builder.adjust(2, 2, 1, 1, 1)
 
     return builder.as_markup()
 
 
-def get_user_info_keyboard():
+def get_user_phone_number_and_geo():
     builder = ReplyKeyboardBuilder()
     builder.button(text="📱 Отправить номер", request_contact=True)
     builder.button(text="📍 Отправить геолокацию", request_location=True)

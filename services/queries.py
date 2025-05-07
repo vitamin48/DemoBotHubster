@@ -46,22 +46,22 @@ def add_user(message):
         conn.commit()
 
 
-def get_lexicon(message, lex_key):
+def get_lexicon(lex_key):
     """Получаем текстовое сообщение на основе ключа и языка"""
-    language_code = message.from_user.language_code
-
-    # Определяем таблицу на основе кода языка
-    if language_code == 'ru':
-        table_name = 'lexicon_ru'
-    elif language_code == 'uk':
-        table_name = 'lexicon_ua'
-    else:
-        table_name = 'lexicon_en'
+    # language_code = message.from_user.language_code
+    #
+    # # Определяем таблицу на основе кода языка
+    # if language_code == 'ru':
+    #     table_name = 'lexicon_ru'
+    # elif language_code == 'uk':
+    #     table_name = 'lexicon_ua'
+    # else:
+    #     table_name = 'lexicon_en'
 
     # Подключение к базе данных и выполнение запроса
     with sqlite3.connect(NAME_DB) as conn:
         cursor = conn.cursor()
-        cursor.execute(f"SELECT text FROM {table_name} WHERE key = ?", (lex_key,))
+        cursor.execute(f"SELECT text FROM 'lexicon_ru' WHERE key = ?", (lex_key,))
         result = cursor.fetchone()
 
         if result:

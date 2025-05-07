@@ -23,7 +23,7 @@ async def start_command(message: Message, bot: Bot):
     logger.info(log_text)
     await bot.send_message(chat_id=config.logs_chat, text=format_message_info(message),
                            parse_mode='html')
-    await message.answer(text=get_lexicon(message=message, lex_key='start'),
+    await message.answer(text=get_lexicon(lex_key='start'),
                          reply_markup=create_start_menu_keyboard(),
                          parse_mode='html')
 

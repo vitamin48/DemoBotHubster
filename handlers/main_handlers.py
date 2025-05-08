@@ -35,3 +35,38 @@ async def handle_back_button(message: Message):
         parse_mode="HTML",
         reply_markup=create_start_menu_keyboard()
     )
+
+
+@main_router.message(F.contact)
+async def handle_contact(message: Message):
+    """Обработчик номера телефона"""
+    contact = message.contact
+    contact_ms_del = await message.delete()
+    response_text = (
+        "✅ Номер телефона получен:\n\n"
+        f"🆔 <b>ID:</b> {message.from_user.id}\n"
+        f"👤 <b>Имя:</b> {message.from_user.full_name}\n"
+        f"📱 <b>Телефон:</b> {contact.phone_number}\n"
+    )
+    await message.answer(
+        text=response_text,
+        parse_mode='html'
+    )
+
+
+@main_router.message(F.location)
+async def handle_location(message: Message):
+    """Обработчик геолокации"""
+    loc = message.location
+
+    response_text = (
+        "📍 Геолокация получена:\n\n"
+        f"• <b>Широта:</b> {loc.latitude}\n"
+        f"• <b>Долгота:</b> {loc.longitude}\n\n"
+        f"<a href='https://www.google.com/maps?q={loc.latitude},{loc.longitude}'>Открыть в Google Maps</a>"
+    )
+
+    await message.answer(
+        text=response_text,
+        parse_mode='html'
+    )

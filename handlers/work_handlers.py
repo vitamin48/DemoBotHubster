@@ -1,6 +1,7 @@
 from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardRemove
+import asyncio
 
 from services.keyboards import get_user_phone_number_and_geo
 from services.queries import get_lexicon, get_user_date_start
@@ -51,6 +52,7 @@ async def handle_user_info(callback: types.CallbackQuery):
         text=formatted_text,
         parse_mode="html"
     )
+    await asyncio.sleep(5)
     await callback.message.answer(text=text2,
                                   parse_mode='html',
                                   reply_markup=get_user_phone_number_and_geo())
@@ -61,6 +63,32 @@ async def handle_user_info(callback: types.CallbackQuery):
 async def handle_user_info(callback: types.CallbackQuery):
     user = callback.from_user
     text = get_lexicon(lex_key='pricing')
+
+    await callback.message.edit_text(
+        text=text,
+        parse_mode="html",
+        reply_markup=kb_back.as_markup()
+    )
+    await callback.answer()
+
+
+@work_router.callback_query(lambda c: c.data == "faq")
+async def handle_user_info(callback: types.CallbackQuery):
+    user = callback.from_user
+    text = get_lexicon(lex_key='faq')
+
+    await callback.message.edit_text(
+        text=text,
+        parse_mode="html",
+        reply_markup=kb_back.as_markup()
+    )
+    await callback.answer()
+
+
+@work_router.callback_query(lambda c: c.data == "bot_management_commands")
+async def handle_user_info(callback: types.CallbackQuery):
+    user = callback.from_user
+    text = get_lexicon(lex_key='bot_management_commands')
 
     await callback.message.edit_text(
         text=text,

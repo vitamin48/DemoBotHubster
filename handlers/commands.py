@@ -5,6 +5,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types import CallbackQuery
 from aiogram import F
 from aiogram.filters import CommandStart
+import asyncio
 
 from services.config import config
 from services.logger import logger
@@ -23,6 +24,8 @@ async def start_command(message: Message, bot: Bot):
     logger.info(log_text)
     await bot.send_message(chat_id=config.logs_chat, text=format_message_info(message),
                            parse_mode='html')
+    await message.answer(text=f'👋 Здравствуйте, {message.from_user.full_name}!')
+    await asyncio.sleep(3)
     await message.answer(text=get_lexicon(lex_key='start'),
                          reply_markup=create_start_menu_keyboard(),
                          parse_mode='html')

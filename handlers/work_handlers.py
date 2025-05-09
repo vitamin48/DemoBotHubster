@@ -2,13 +2,14 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardRemove
 import asyncio
+from datetime import datetime, timedelta
 
 from services.keyboards import get_user_phone_number_and_geo
 from services.queries import get_lexicon, get_user_date_start
-from services.keyboards import kb_back, create_back_gift_keyboard
+from services.keyboards import kb_back, create_back_gift_keyboard, create_back_order_bot_keyboard
 
 from functions.replacing_placeholders import (replace_placeholder_information_about_bot_users,
-                                              replace_placeholder_bot_management_commands)
+                                              replace_placeholder)
 
 work_router = Router()
 
@@ -91,7 +92,8 @@ async def handle_user_info(callback: types.CallbackQuery):
     user = callback.from_user
     text = get_lexicon(lex_key='bot_management_commands')
     user_data = {'USER_ID': user.id}
-    formatted_text = replace_placeholder_bot_management_commands(text, user_data)
+    defaults = {'USER_ID': 'USER_ID_TO_SEND'}
+    formatted_text = replace_placeholder(text, user_data, defaults)
 
     await callback.message.edit_text(
         text=formatted_text,
@@ -110,5 +112,30 @@ async def handle_user_info(callback: types.CallbackQuery):
         text=text,
         parse_mode="html",
         reply_markup=create_back_gift_keyboard()
+    )
+    await callback.answer()
+
+
+@work_router.callback_query(lambda c: c.data == "get_gift")
+async def handle_user_info(callback: types.CallbackQuery):
+    user = callback.from_user
+    date_start = get_user_date_start(user.id)
+    # Преобразуем строку date_start в datetime
+    dt = datetime.strptime(date_start, '%Y-%m-%d %H:%M:%S')
+    # Добавляем временной интервал
+    dt += timedelta(days=5, hours=3)
+    # Получаем в исходном формате
+    date_promo = dt.strftime('%Y-%m-%d %H:%M')
+
+    # Раздел с placeholder
+    text = get_lexicon(lex_key='get_gift')
+    user_data = {'BOT_DATE_PROMO': date_promo}
+    defaults = {'BOT_DATE_PROMO': 'Нет данных о дате регистрации'}
+    formatted_text = replace_placeholder(text, user_data, defaults)
+
+    await callback.message.edit_text(
+        text=formatted_text,
+        parse_mode="html",
+        reply_markup=create_back_order_bot_keyboard()
     )
     await callback.answer()

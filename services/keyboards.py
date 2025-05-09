@@ -80,7 +80,7 @@ def get_user_phone_number_and_geo():
 
 def create_back_gift_keyboard():
     """
-    Создает инлайн-клавиатуру назад+подарок
+    Создает инлайн-клавиатуру назад+ЗАКАЗАТЬ БОТА
     Возвращает InlineKeyboardMarkup объект
     """
     builder = InlineKeyboardBuilder()
@@ -88,6 +88,32 @@ def create_back_gift_keyboard():
     builder.button(
         text="🎁 Получить подарок",
         callback_data="get_gift"
+    )
+    builder.button(
+        text="⬅️ Назад",
+        callback_data="kb_back"
+    )
+
+    # Распределяем кнопки по 2 в ряд для лучшего отображения
+    builder.adjust(1, 1)
+
+    return builder.as_markup()
+
+
+def create_back_order_bot_keyboard():
+    """
+    Создает инлайн-клавиатуру назад+подарок
+    Возвращает InlineKeyboardMarkup объект
+    """
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="🛒 Заказать бота",
+        callback_data="order_bot"
+    )
+    builder.button(
+        text="⬅️ Назад",
+        callback_data="kb_back"
     )
 
     # Распределяем кнопки по 2 в ряд для лучшего отображения

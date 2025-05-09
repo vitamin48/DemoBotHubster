@@ -35,14 +35,14 @@ async def start_command(message: Message, bot: Bot):
 @send_command.message(Command(commands=["send"]))
 async def send_message(message: Message, bot: Bot):
     user_id = message.from_user.id
-    if user_id in config.admins:
+    # Разделяем текст команды
+    command_parts = message.text.split(' ', 2)  # Разделяем по пробелам
+    if len(command_parts) < 3:
+        await message.answer("Неправильный формат команды. Используйте: /send <chat_id> <текст>")
+        return
+    chat_id = command_parts[1]
+    if user_id in config.admins or user_id == int(chat_id):
         try:
-            # Разделяем текст команды
-            command_parts = message.text.split(' ', 2)  # Разделяем по пробелам
-            if len(command_parts) < 3:
-                await message.answer("Неправильный формат команды. Используйте: /send <chat_id> <текст>")
-                return
-            chat_id = command_parts[1]
             text = command_parts[2]
             keyboard = InlineKeyboardBuilder()
             if '<btn>' in text:

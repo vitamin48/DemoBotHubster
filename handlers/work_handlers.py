@@ -5,9 +5,10 @@ import asyncio
 
 from services.keyboards import get_user_phone_number_and_geo
 from services.queries import get_lexicon, get_user_date_start
-from services.keyboards import kb_back
+from services.keyboards import kb_back, create_back_gift_keyboard
 
-from functions.replacing_placeholders import replace_placeholder_information_about_bot_users
+from functions.replacing_placeholders import (replace_placeholder_information_about_bot_users,
+                                              replace_placeholder_bot_management_commands)
 
 work_router = Router()
 
@@ -89,10 +90,25 @@ async def handle_user_info(callback: types.CallbackQuery):
 async def handle_user_info(callback: types.CallbackQuery):
     user = callback.from_user
     text = get_lexicon(lex_key='bot_management_commands')
+    user_data = {'USER_ID': user.id}
+    formatted_text = replace_placeholder_bot_management_commands(text, user_data)
+
+    await callback.message.edit_text(
+        text=formatted_text,
+        parse_mode="html",
+        reply_markup=kb_back.as_markup()
+    )
+    await callback.answer()
+
+
+@work_router.callback_query(lambda c: c.data == "technical_information")
+async def handle_user_info(callback: types.CallbackQuery):
+    user = callback.from_user
+    text = get_lexicon(lex_key='technical_information')
 
     await callback.message.edit_text(
         text=text,
         parse_mode="html",
-        reply_markup=kb_back.as_markup()
+        reply_markup=create_back_gift_keyboard()
     )
     await callback.answer()

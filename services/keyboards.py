@@ -76,3 +76,21 @@ def get_user_phone_number_and_geo():
     builder.button(text="🔙 Назад")
     builder.adjust(1, 1, 1)
     return builder.as_markup(resize_keyboard=True)
+
+
+def create_back_gift_keyboard():
+    """
+    Создает инлайн-клавиатуру назад+подарок
+    Возвращает InlineKeyboardMarkup объект
+    """
+    builder = InlineKeyboardBuilder()
+
+    builder.button(
+        text="🎁 Получить подарок",
+        callback_data="get_gift"
+    )
+
+    # Распределяем кнопки по 2 в ряд для лучшего отображения
+    builder.adjust(1, 1)
+
+    return builder.as_markup()

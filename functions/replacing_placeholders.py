@@ -40,3 +40,29 @@ def replace_placeholder_information_about_bot_users(template: str,
         template = template.replace(placeholder, safe_value)
 
     return template
+
+
+def replace_placeholder_bot_management_commands(template: str,
+                                                user_data: Dict[str, Optional[str]]) -> str:
+    """Форматирует текст от bot_management_commands
+    с плейсхолдерами, сохраняя HTML-разметку
+
+    Args:
+        template: Шаблон текста с плейсхолдерами
+        (%USER_ID%)
+        user_data: Словарь с данными пользователя
+
+    Returns:
+        Отформатированная строка с HTML-разметкой
+    """
+    # Значения по умолчанию для отсутствующих данных
+    defaults = {'USER_ID': 'USER_ID_TO_SEND'}
+    # Безопасная замена плейсхолдеров
+    for key, default in defaults.items():
+        placeholder = f'%{key}%'
+        value = user_data.get(key, default)
+        # Экранирование, кроме None (который заменяется на default)
+        safe_value = escape(str(value)) if value is not None else default
+        template = template.replace(placeholder, safe_value)
+
+    return template

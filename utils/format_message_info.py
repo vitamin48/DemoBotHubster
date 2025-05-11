@@ -1,4 +1,7 @@
 from aiogram.types import Message, CallbackQuery
+from aiogram import Bot
+from services.config import config
+from services.queries import get_lexicon
 
 
 def format_message_info(message: Message) -> str:
@@ -17,3 +20,19 @@ def format_callback_query_info(callback_query: CallbackQuery) -> str:
     return (f'Пользователь с id={callback_query.message.chat.id}, ником: @{callback_query.message.chat.username}  '
             f'и именем: {callback_query.message.chat.full_name} нажал на кнопку:'
             f'\n\n{callback_query.data}\n\n<code>/send {callback_query.message.chat.id} </code>')
+
+
+async def handle_callback_query(callback_query: CallbackQuery,
+                                bot: Bot,
+                                lex_key: str,
+                                reply_markup=None):
+    """Функция обработки при нажатии кнопок из меню. Лог и отправка"""
+    # Отправка сообщения в лог
+    await bot.send_message(chat_id=config.logs_chat,
+                           text=format_callback_query_info(callback_query),
+                           parse_mode='html')
+
+    # Получение текста из лексикона и отправка пользователю
+    response_text = get_lexicon(lex_key=lex_key)
+    await bot.send_message(chat_id=callback_query.from_user.id, text=response_text, parse_mode='html',
+                           reply_markup=reply_markup, disable_web_page_preview=True)

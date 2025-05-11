@@ -1,7 +1,10 @@
 from aiogram import Router, types, F
 from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram import Bot
 
 from services.queries import get_lexicon
+from services.logger import logger
+from services.config import config
 from services.keyboards import create_start_menu_keyboard
 from services.keyboards import kb_back
 
@@ -38,7 +41,7 @@ async def handle_back_button(message: Message):
 
 
 @main_router.message(F.contact)
-async def handle_contact(message: Message):
+async def handle_contact(message: Message, bot: Bot):
     """Обработчик номера телефона"""
     contact = message.contact
     contact_ms_del = await message.delete()
@@ -52,10 +55,14 @@ async def handle_contact(message: Message):
         text=response_text,
         parse_mode='html'
     )
+    logger.info(response_text)
+    await bot.send_message(chat_id=config.logs_chat,
+                           text=response_text,
+                           parse_mode='html', reply_markup=None)
 
 
 @main_router.message(F.location)
-async def handle_location(message: Message):
+async def handle_location(message: Message, bot: Bot):
     """Обработчик геолокации"""
     loc = message.location
 
@@ -70,3 +77,7 @@ async def handle_location(message: Message):
         text=response_text,
         parse_mode='html'
     )
+    logger.info(response_text)
+    await bot.send_message(chat_id=config.logs_chat,
+                           text=response_text,
+                           parse_mode='html', reply_markup=None)

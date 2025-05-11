@@ -1,10 +1,13 @@
 from aiogram import Router, types
+from aiogram import Bot
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardRemove
 import asyncio
 from datetime import datetime, timedelta
+from services.utils import send_logs_by_button
 
 from services.keyboards import get_user_phone_number_and_geo
+from services.config import config
 from services.queries import get_lexicon, get_user_date_start
 from services.keyboards import kb_back, create_back_gift_keyboard, create_back_order_bot_keyboard
 
@@ -15,7 +18,7 @@ work_router = Router()
 
 
 @work_router.callback_query(lambda c: c.data == "information_about_you")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     user = callback.from_user
     text = get_lexicon(lex_key='information_about_you')
 
@@ -24,11 +27,13 @@ async def handle_user_info(callback: types.CallbackQuery):
         parse_mode="html",
         reply_markup=kb_back.as_markup()
     )
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()
 
 
 @work_router.callback_query(lambda c: c.data == "information_about_bot_users")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     """👥 Пользователи"""
     # Получаем объект пользователя
     user = callback.from_user
@@ -58,11 +63,13 @@ async def handle_user_info(callback: types.CallbackQuery):
     await callback.message.answer(text=text2,
                                   parse_mode='html',
                                   reply_markup=get_user_phone_number_and_geo())
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()
 
 
 @work_router.callback_query(lambda c: c.data == "pricing")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     user = callback.from_user
     text = get_lexicon(lex_key='pricing')
 
@@ -71,11 +78,13 @@ async def handle_user_info(callback: types.CallbackQuery):
         parse_mode="html",
         reply_markup=kb_back.as_markup()
     )
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()
 
 
 @work_router.callback_query(lambda c: c.data == "faq")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     user = callback.from_user
     text = get_lexicon(lex_key='faq')
 
@@ -84,11 +93,13 @@ async def handle_user_info(callback: types.CallbackQuery):
         parse_mode="html",
         reply_markup=kb_back.as_markup()
     )
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()
 
 
 @work_router.callback_query(lambda c: c.data == "bot_management_commands")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     user = callback.from_user
     text = get_lexicon(lex_key='bot_management_commands')
     user_data = {'USER_ID': user.id}
@@ -100,11 +111,13 @@ async def handle_user_info(callback: types.CallbackQuery):
         parse_mode="html",
         reply_markup=kb_back.as_markup()
     )
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()
 
 
 @work_router.callback_query(lambda c: c.data == "technical_information")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     user = callback.from_user
     text = get_lexicon(lex_key='technical_information')
 
@@ -113,11 +126,13 @@ async def handle_user_info(callback: types.CallbackQuery):
         parse_mode="html",
         reply_markup=create_back_gift_keyboard()
     )
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()
 
 
 @work_router.callback_query(lambda c: c.data == "get_gift")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     user = callback.from_user
     date_start = get_user_date_start(user.id)
     # Преобразуем строку date_start в datetime
@@ -138,11 +153,13 @@ async def handle_user_info(callback: types.CallbackQuery):
         parse_mode="html",
         reply_markup=create_back_order_bot_keyboard()
     )
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()
 
 
 @work_router.callback_query(lambda c: c.data == "order_bot")
-async def handle_user_info(callback: types.CallbackQuery):
+async def handle_user_info(callback: types.CallbackQuery, bot: Bot):
     user = callback.from_user
     text = get_lexicon(lex_key='order_bot')
 
@@ -151,4 +168,6 @@ async def handle_user_info(callback: types.CallbackQuery):
         parse_mode="html",
         reply_markup=kb_back.as_markup()
     )
+    await send_logs_by_button(callback_query=callback,
+                              bot=bot)
     await callback.answer()

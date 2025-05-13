@@ -1,15 +1,14 @@
 import sqlite3
 from datetime import datetime
 from aiogram.types import Message, CallbackQuery
-
-NAME_DB = 'db_bot.db'
+from services.config import path_to_db
 
 
 # def get_start_data():
 #     """
 #     Получаем токен, чат для логов и список админов.
 #     """
-#     with sqlite3.connect(NAME_DB) as conn:
+#     with sqlite3.connect(path_to_db) as conn:
 #         cursor = conn.cursor()
 #         cursor.execute("SELECT TOKEN_BOT FROM TOKENS_BOT")
 #         token = str(cursor.fetchone()[0])
@@ -33,7 +32,7 @@ def add_user(message):
     language_code = user.language_code
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    with sqlite3.connect(NAME_DB) as conn:
+    with sqlite3.connect(path_to_db) as conn:
         cursor = conn.cursor()
 
         # Вставляем данные о пользователе
@@ -59,7 +58,7 @@ def get_lexicon(lex_key):
     #     table_name = 'lexicon_en'
 
     # Подключение к базе данных и выполнение запроса
-    with sqlite3.connect(NAME_DB) as conn:
+    with sqlite3.connect(path_to_db) as conn:
         cursor = conn.cursor()
         cursor.execute(f"SELECT text FROM 'lexicon_ru' WHERE key = ?", (lex_key,))
         result = cursor.fetchone()
@@ -80,7 +79,7 @@ def get_user_date_start(user_id: int):
         Строка с датой в формате 'YYYY-MM-DD HH:MM:SS' или None,
         если пользователь не найден или поле пустое
     """
-    with sqlite3.connect(NAME_DB) as conn:
+    with sqlite3.connect(path_to_db) as conn:
         conn.row_factory = sqlite3.Row  # Для доступа к полям по именам
         cursor = conn.cursor()
 

@@ -1,11 +1,12 @@
 import sqlite3
 import os
 
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path_to_db = os.path.join(base_dir, 'db_bot.db')
+
 
 class Config:
     def __init__(self):
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        path_to_db = os.path.join(base_dir, 'db_bot.db')
         with sqlite3.connect(path_to_db) as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT TOKEN_BOT FROM TOKENS_BOT ORDER BY ROWID ASC")
